@@ -1,0 +1,170 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load render_partial %}
+{% block title %}
+    eLearning The Online Courses
+{% endblock %}
+{% block content %}
+
+    <!-- Carousel Start -->
+    <div class="container-fluid p-0 mb-5">
+        <div class="owl-carousel header-carousel position-relative">
+            <div class="owl-carousel-item position-relative">
+                <img class="img-fluid" src="{% static 'img/carousel-1.jpg' %}" alt="">
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(24, 29, 56, .7);">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-sm-10 col-lg-8">
+                                <h5 class="text-primary text-uppercase mb-3 animated slideInDown">Best Online Courses</h5>
+                                <h1 class="display-3 text-white animated slideInDown">The Best Online Learning Platform</h1>
+                                <p class="fs-5 text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea sanctus eirmod elitr.</p>
+                                
+                                {% if not request.user.is_authenticated %}
+                                    <a href="{% url 'register_page' %}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="owl-carousel-item position-relative">
+                <img class="img-fluid" src="{% static 'img/carousel-2.jpg' %}" alt="">
+                <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center" style="background: rgba(24, 29, 56, .7);">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-sm-10 col-lg-8">
+                                <h5 class="text-primary text-uppercase mb-3 animated slideInDown">Best Online Courses</h5>
+                                <h1 class="display-3 text-white animated slideInDown">Get Educated Online From Your Home</h1>
+                                <p class="fs-5 text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea sanctus eirmod elitr.</p>
+                                {% if not request.user.is_authenticated %}
+                                    <a href="{% url 'register_page' %}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Join Now</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+
+
+    <!-- About Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-100 h-100" src="{% static 'img/about.jpg' %}" alt="" style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
+                    <h1 class="mb-4">Welcome to eLEARNING</h1>
+                    <p class="mb-4">{{ about.about_us }}</p>
+                    <div class="row gy-2 gx-4 mb-4">
+                        {% for service in services %}
+                            <div class="col-sm-6">
+                                <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>{{ service.title }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    {% render_partial "categories" %}
+
+
+    <!-- Courses Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Courses</h6>
+                <h1 class="mb-5">Popular Courses</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+                {% for course in courses %}
+                                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item bg-light">
+                    <div class="position-relative overflow-hidden">
+                        <img class="img-fluid" src="{{ course.image.url }}" alt="" style="height: 200px;width: 400px;">
+                        <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                            <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                style="border-radius: 30px 0 0 30px;">Read More</a>
+                        </div>
+                    </div>
+                    <div class="text-center p-4 pb-0">
+                        {% if course.price != 0 %}
+                        <h3 class="mb-0">${{ course.price }}</h3><br>
+                        {% else %}
+                        <h3 class="mb-0">Free</h3><br>
+                        {% endif %}
+                        <h5 class="mb-4">{{ course.title }}</h5>
+                    </div>
+                    <div class="d-flex border-top">
+                        <small class="flex-fill text-center border-end py-2"><i
+                                class="fa fa-user-tie text-primary me-2"></i>{{ course.teacher.username | title }} {{ course.teacher.last_name | title }}</small>
+                        <small class="flex-fill text-center border-end py-2"><i
+                                class="fa fa-clock text-primary me-2"></i>1.49 Hrs</small>
+                        <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i>{{ course.student }}
+                            Students</small>
+                    </div>
+                </div>
+            </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Courses End -->
+
+
+    <!-- Team Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Instructors</h6>
+                <h1 class="mb-5">Expert Instructors</h1>
+            </div>
+            <div class="row g-4">
+                {% for instructor in instructors %}
+                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="{% cycle '0.1s' '0.3s' '0.5s' '0.7s' %}">
+                        <div class="team-item bg-light">
+                            <div class="overflow-hidden">
+                                <img class="img-fluid" src="{{ instructor.user.image.url }}" alt="">
+                            </div>
+                            <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                                <div class="bg-light d-flex justify-content-center pt-2 px-1">
+                                    {% if instructor.user.facebook_link %}
+                                        <a class="btn btn-sm-square btn-primary mx-1" href="{{ instructor.user.facebook_link }}"><i class="fab fa-facebook-f"></i></a>
+                                    {% endif %}
+                                    {% if instructor.user.twitter_link %}
+                                        <a class="btn btn-sm-square btn-primary mx-1" href="{{ instructor.user.twitter_link }}"><i class="fab fa-twitter"></i></a>
+                                    {% endif %}
+                                    {% if instructor.user.linkdin_link %}
+                                        <a class="btn btn-sm-square btn-primary mx-1" href="{{ instructor.user.linkdin_link }}"><i class="fab fa-linkedin-in"></i></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="text-center p-4">
+                                <h5 class="mb-0">{{ instructor.user.username }} {{ instructor.user.last_name }}</h5>
+                                <small>{{ instructor.user.short_intro }}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Team End -->
+
+
+
+
+{% endblock %}

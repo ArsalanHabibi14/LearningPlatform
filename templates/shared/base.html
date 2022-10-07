@@ -1,0 +1,30 @@
+{% load static %}
+{% load render_partial %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% include 'shared/CSSFiles.html' %}
+    {% block style_css %}
+    {% endblock %}
+</head>
+<body>
+{% render_partial 'header' %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert" style="width: 300px">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+{% endif %}
+{% block content %}
+{% endblock %}
+{% include 'shared/footer.html' %}
+{% include 'shared/JSFiles.html' %}
+{% block js_ref %}
+{% endblock %}
+</body>
+</html>

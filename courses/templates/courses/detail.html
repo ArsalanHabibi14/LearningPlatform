@@ -1,0 +1,160 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <h1 class="text-white">{{ object.title }} Course</h1>
+                <h4 class="text-white">Teacher : {{ object.teacher.username }} {{ object.teacher.last_name }}</h4>
+                <h6 class="text-white">{{ object.student }} has Enrolled</h6>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+    <!-- About Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-100 h-100" src="{{ object.image.url }}" alt=""
+                             style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <h6 class="section-title bg-white text-start text-primary pe-3">About Course</h6>
+                    <p class="mb-4">{{ object.content }}</p>
+                    <div class="row gy-2 gx-4 mb-4">
+                        {% for tag in object.tag.all %}
+                            <div class="col-sm-6">
+                                <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>{{ tag }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if request.user.is_authenticated %}
+                        {% if object.teacher == profile.first %}
+                        <a class="btn btn-primary py-3 px-5 mt-2" href="#">Continue Teaching</a>
+                    {% else %}
+                        {% if order_detail.exists %}
+                            <a class="btn btn-primary py-3 px-5 mt-2" href="#">Continue
+                                Learning</a><br>
+                            <a class="btn btn-danger py-3 px-5 mt-2" href="{% url 'remove_order' object.id %}">Leave The Course</a>
+                        {% else %}
+                            <a class="btn btn-primary py-3 px-5 mt-2" href="{% url 'add_order' object.id %}">Enroll
+                                Now</a>
+                        {% endif %}
+                    {% endif %}
+                    {% else %}
+                        <a class="btn btn-primary py-3 px-5 mt-2" href="{% url 'login_page' %}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+            <hr>
+            <h2>The First Video Of This Course : </h2>
+            {% if video is not None %}
+                <video src="{{ video.video.url }}" controls style="width: 500px;direction: ltr"></video>
+            {% endif %}
+            <br>
+            {% if order_detail.exists %}
+                <div style="border: 1px solid #707070;">
+                    <ol>
+                        {% for video in object.videos_set.all %}
+                            <a href="{{ video.video.url }}" class="text-black-50" target="_blank">
+                                <li>{{ video.title }}</li>
+                            </a><br>
+                        {% endfor %}
+                    </ol>
+                </div>
+            {% else %}
+                <div class="alert alert-danger">
+                    <p>You have not enroll for this course and you can't download the video!<br>to enroll Click <a
+                            href="{% url 'add_order' object.id %}">here!</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- About End -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="col-lg-12 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+            <h1>Leave Your Comment!</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        {% for field in form %}
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    {{ field }}<br>
+                                    <label for="subject">{{ field.label }}</label>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <center>
+                            <div class="col-3">
+                                <button class="btn btn-primary w-100 py-3" type="submit">Leave</button>
+                            </div>
+                        </center>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    {#    alksdjlskjdfa;sojihfaiopjshflaiwdhfliawifdh#}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Related Courses</h6>
+                <h1 class="mb-5">Related Courses</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+                {% for category in related_courses %}
+                    {% for course in category.course_set.all.distinct %}
+                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="course-item bg-light">
+                                <div class="position-relative overflow-hidden">
+                                    <img class="img-fluid" src="{{ course.image.url }}" alt=""
+                                         style="height: 200px;width: 400px;">
+                                    <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                                        <a href="#" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                           style="border-radius: 30px 0 0 30px;">Read More</a>
+                                    </div>
+                                </div>
+                                <div class="text-center p-4 pb-0">
+                                    {% if course.price != 0 %}
+                                        <h3 class="mb-0">${{ course.price }}</h3><br>
+                                    {% else %}
+                                        <h3 class="mb-0">Free</h3><br>
+                                    {% endif %}
+                                    <h5 class="mb-4">{{ course.title }}</h5>
+                                </div>
+                                <div class="d-flex border-top">
+                                    <small class="flex-fill text-center border-end py-2"><i
+                                            class="fa fa-user-tie text-primary me-2"></i>{{ course.teacher.username | title }} {{ course.teacher.last_name | title }}
+                                    </small>
+                                    <small class="flex-fill text-center border-end py-2"><i
+                                            class="fa fa-clock text-primary me-2"></i>1.49 Hrs</small>
+                                    <small class="flex-fill text-center py-2"><i
+                                            class="fa fa-user text-primary me-2"></i>{{ course.student }}
+                                        Students</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

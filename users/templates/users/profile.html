@@ -1,0 +1,134 @@
+{% extends 'shared/base.html' %}
+
+
+{% block title %}
+    Profile
+{% endblock title %}
+    
+{% block content %}
+        <!-- Header Start -->
+    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <img src="{{ object.image.url }}" class="border rounded-circle p-2 mx-auto mb-3" style="width: 100px;height: 115px;">
+                    <h4 style="color: white;">{{ object.username | title }} {{ object.last_name | title }}</h4>
+                    {% include 'users/nav.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+    <!-- Team Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Skills</h6>
+                <h1 class="mb-5">Top Skills</h1>
+            </div>
+            <div class="row g-4">
+                {% for skill in object.skills.all %}
+                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="team-item bg-light">
+                            <div class="overflow-hidden">
+                                <img class="img-fluid" src="{{ skill.image.url }}" alt="">
+                            </div>
+                            <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+
+                            </div>
+                            <div class="text-center p-4">
+                                <h5 class="mb-0">{{ skill.title }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Team End -->
+        <!-- Team Start -->
+    <center>
+        <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h4 class="section-title bg-white text-center text-primary px-3">About Me!</h4>
+            </div>
+            <div class="row g-4">
+                {# {% for info in object %} #}
+                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <center>
+                            <div class="team-item bg-light">
+                            <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+
+                            </div>
+                            <div class="text-center p-12">
+                                <h5 class="mb-0">
+                                UserName : {{ object.username }}</h5><br><br>
+                                <h5 class="mb-0">
+                                    LastName : {{ object.last_name }}
+                                </h5><br><br>
+                                <h5 class="mb-0">
+                                    Email : {{ object.email }}
+                                </h5><br><br>
+                                {% if object.description %}
+                                    
+                                <h5 class="mb-0">
+                                    About Me : {{ object.Description }}
+                                </h5>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                        </center>
+                    </div>
+                {# {% endfor %} #}
+            </div>
+        </div>
+    </div>
+    </center>
+    <!-- Team End -->
+    <div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Courses</h6>
+            <h1 class="mb-5">In Progress Courses</h1>
+        </div>
+        <div class="row g-4 justify-content-center">
+            {% for order in order_detail %}
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="course-item bg-light">
+                    <div class="position-relative overflow-hidden">
+                        <img class="img-fluid" src="{{ order.course.image.url }}" alt="" style="height: 200px;width: 400px;">
+                        <div class="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
+                            <a href="{% url 'course_detail' order.course.id %}" class="flex-shrink-0 btn btn-sm btn-primary px-3"
+                                style="border-radius: 30px 0 0 30px;">Continute Learning</a>
+                        </div>
+                    </div>
+                    <div class="text-center p-4 pb-0">
+                        {% if order.course.price != 0 %}
+                        <h3 class="mb-0">${{ order.course.price }}</h3><br>
+                        {% else %}
+                        <h3 class="mb-0">Free</h3><br>
+                        {% endif %}
+                        <h5 class="mb-4">{{ order.course.title }}</h5>
+                    </div>
+                    <div class="d-flex border-top">
+                        <small class="flex-fill text-center border-end py-2"><i
+                                class="fa fa-user-tie text-primary me-2"></i>{{ order.course.teacher.username | title }} {{ order.course.teacher.last_name | title }}</small>
+                        <small class="flex-fill text-center border-end py-2"><i
+                                class="fa fa-clock text-primary me-2"></i>1.49 Hrs</small>
+                        <small class="flex-fill text-center py-2"><i class="fa fa-user text-primary me-2"></i>{{ order.course.student }}
+                            Students</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock content %}
+    
